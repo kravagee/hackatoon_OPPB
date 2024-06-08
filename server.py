@@ -168,7 +168,7 @@ def example(username, nameex):
 def top(username):
     con = sqlite3.connect('project.db')
     cur = con.cursor()
-    query = cur.execute(f'''SELECT login, points FROM users ORDER BY points DESC LIMIT 10''').fetchall()
+    query = cur.execute(f'''SELECT login, points FROM stats ORDER BY points DESC LIMIT 10''').fetchall()
     return render_template('top_users.html', query=query)
 
 
@@ -181,8 +181,11 @@ def profile(username):
     else:
         con = sqlite3.connect('project.db')
         cur = con.cursor()
-        query = cur.execute(f'''SELECT solved_examples, incorrectly_solved_examples, points 
+        query = cur.execute(f'''SELECT solved_examples, examples, points 
         FROM stats WHERE login="{username}"''').fetchone()
+        if not query[1]:
+            return render_template('private_office.html', solved_examples='Вы ещё не решали примеры',
+                                   points=query[2], percentage_examples=0, username=username)
         percentage = int(query[0]) / int(query[1])
         return render_template('private_office.html', solved_examples=query[0],
                                points=query[2], percentage_examples=query[0], username=username)
@@ -240,50 +243,63 @@ def solving_example(nameex, difficult, username):
             return redirect(url_for('home', username=username))
         if nameex == 'square':
             response = math.check_answer_square_x(anwser)[0]
-            return redirect(url_for('example_stats', response=response, example_equation=equation))
+            return redirect(url_for('example_stats', username=username, response=response,
+                                    example_equation=equation))
         elif nameex == 'line':
             response = math.check_answer_line_x(anwser)[0]
-            return redirect(url_for('example_stats', response=response, example_equation=equation))
+            return redirect(url_for('example_stats', username=username, response=response,
+                                    example_equation=equation))
         elif nameex == 'plus':
             if difficult == 'easy':
                 response = math.check_answer_sum_stage_1(anwser)[0]
-                return redirect(url_for('example_stats', response=response, example_equation=equation))
+                return redirect(url_for('example_stats', username=username, response=response,
+                                        example_equation=equation))
             elif difficult == 'normal':
                 response = math.check_answer_sum_stage_2(anwser)[0]
-                return redirect(url_for('example_stats', response=response, example_equation=equation))
+                return redirect(url_for('example_stats', username=username, response=response,
+                                        example_equation=equation))
             else:
                 response = math.check_answer_sum_stage_3(anwser)[0]
-                return redirect(url_for('example_stats', response=response, example_equation=equation))
+                return redirect(url_for('example_stats', username=username, response=response,
+                                        example_equation=equation))
         elif nameex == 'minus':
             if difficult == 'easy':
                 response = math.check_answer_min_stage_1(anwser)[0]
-                return redirect(url_for('example_stats', response=response, example_equation=equation))
+                return redirect(url_for('example_stats', username=username, response=response,
+                                        example_equation=equation))
             elif difficult == 'normal':
                 response = math.check_answer_min_stage_2(anwser)[0]
-                return redirect(url_for('example_stats', response=response, example_equation=equation))
+                return redirect(url_for('example_stats', username=username, response=response,
+                                        example_equation=equation))
             else:
                 response = math.check_answer_min_stage_3(anwser)[0]
-                return redirect(url_for('example_stats', response=response, example_equation=equation))
+                return redirect(url_for('example_stats', username=username, response=response,
+                                        example_equation=equation))
         elif nameex == 'sub':
             if difficult == 'easy':
                 response = math.check_answer_crop_stage_1(anwser)[0]
-                return redirect(url_for('example_stats', response=response, example_equation=equation))
+                return redirect(url_for('example_stats', username=username, response=response,
+                                        example_equation=equation))
             elif difficult == 'normal':
                 response = math.check_answer_crop_stage_2(anwser)[0]
-                return redirect(url_for('example_stats', response=response, example_equation=equation))
+                return redirect(url_for('example_stats', username=username, response=response,
+                                        example_equation=equation))
             else:
                 response = math.check_answer_crop_stage_3(anwser)[0]
                 return redirect(url_for('example_stats', response=response, example_equation=equation))
         elif nameex == 'multiply':
             if difficult == 'easy':
                 response = math.check_answer_multiply_stage_1(anwser)[0]
-                return redirect(url_for('example_stats', response=response, example_equation=equation))
+                return redirect(url_for('example_stats', username=username, response=response,
+                                        example_equation=equation))
             elif difficult == 'normal':
                 response = math.check_answer_multiply_stage_2(anwser)[0]
-                return redirect(url_for('example_stats', response=response, example_equation=equation))
+                return redirect(url_for('example_stats', username=username, response=response,
+                                        example_equation=equation))
             else:
                 response = math.check_answer_multiply_stage_3(anwser)[0]
-                return redirect(url_for('example_stats', response=response, example_equation=equation))
+                return redirect(url_for('example_stats', username=username, response=response,
+                                        example_equation=equation))
     else:
         return render_template('solving_examples.html', example_equation=equation)
 
@@ -294,10 +310,14 @@ def example_stats(username, response, example_equation):
     if request.method == 'POST':
         return redirect(url_for('home', username=username))
     else:
+        point = math.edit_rating(username, response[2])
+        con = sqlite3.connect('project.db')
+        cur = con.cursor()
         if response[0] == 'Верно':
-            point = math.edit_rating(username, response[2])
+            cur.execute(f'''UPDATE stats SET solved_examples = solved_examples + 1 WHERE login="{login}"''')
         else:
             point = 0
+        cur.execute(f'''UPDATE stats SET examples = examples + 1 WHERE login="{login}"''')
         return render_template('example_stats.html', example_equation=example_equation, points=point, response=response)
 
 
