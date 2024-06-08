@@ -6,6 +6,9 @@ class MyMath:
     def generate_square_x(self):
         '''Вернет кв уравнение в строковом формате'''
         self.a_sq = randint(-3, 5)
+        if self.a_sq == 0:
+            while self.a_sq == 0:
+                self.a_sq = randint(-3, 5)
         self.b_sq = randint(-11, 11)
         self.c_sq = randint(-11, 11)
         if self.b_sq == 0:
