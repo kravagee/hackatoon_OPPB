@@ -325,9 +325,17 @@ def example_stats(username, response, example_equation, point):
             cur.execute(f'''UPDATE stats SET solved_examples={solved_examples} WHERE login="{login}"''')
             con.close()
         else:
+            solved_examples = 0
             point = 0
         con = sqlite3.connect('project.db')
         cur = con.cursor()
+        query = cur.execute(f'''SELECT * FROM stats WHERE login="{login}"''').fetchone()
+        if not query:
+            cur.execute(f'''INSERT INTO stats VALUES ({1}, {solved_examples}, "{login}", {point})''')
+            con.commit()
+            con.close()
+            return render_template('example_stats.html', example_equation=example_equation, points=point,
+                                   response=response)
         cur.execute(f'''UPDATE stats SET examples={examples} WHERE login="{login}"''')
         con.commit()
         con.close()
