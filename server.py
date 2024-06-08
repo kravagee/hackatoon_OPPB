@@ -130,7 +130,7 @@ def home(username):
     if request.method == 'POST':
         value = list(request.form.values())[0]
         if value == '0':
-            return redirect(url_for('index'))
+            return redirect(url_for('profile', username=username))
         elif value == '1':
             return redirect(url_for('top', username=username))
         elif value == '2':
@@ -236,6 +236,8 @@ def solving_example(nameex, difficult, username):
             equation = math.generate_multiply_stage_3()
     if request.method == 'POST':
         anwser = request.form['anwser']
+        if list(request.form.values())[0] == 3:
+            return redirect(url_for('home', username=username))
         if nameex == 'square':
             response = math.check_answer_square_x(anwser)[0]
             return redirect(url_for('example_stats', response=response, example_equation=equation))
@@ -283,7 +285,7 @@ def solving_example(nameex, difficult, username):
                 response = math.check_answer_multiply_stage_3(anwser)[0]
                 return redirect(url_for('example_stats', response=response, example_equation=equation))
     else:
-        return render_template('solving_examples.html', example=equation)
+        return render_template('solving_examples.html', example_equation=equation)
 
 
 @server.route('/example_stats/<username>', methods=['GET', 'POST'])

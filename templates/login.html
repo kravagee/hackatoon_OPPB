@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Вход</title>
-   <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/style_login.css') }}">
 </head>
 <body>
   <div class="registration-container">
@@ -13,7 +13,7 @@
       <input name="username" type="text" placeholder="Имя пользователя" required>
       <input name="password" type="password" placeholder="Пароль" required>
       <div class='help_reg'>
-      <a href="#" data-tooltip="нет аккаунта,тогда зарегестрируйся!">регестрация</a></p>
+      <a href="127.0.0.1/register" data-tooltip="Нет аккаунта,тогда зарегестрируйся!">регестрация</a></p>
       <a>{{ response }}</a>
       </div>
       <button type="submit">Войти</button>
