@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Решай и Радуйся!</title>
+  <link rel="stylesheet" href="index_style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Решай и радуйся</h1>
+      <h2>результаты!</h2>
+    </header>
+    <main>
+        <table class='table'>
+        <tr>
+          <td>Пример</td>
+          <td>{{ example_equation }}</td>
+        </tr>
+        <tr>
+          <td>Получено очков:</td>
+          <td>{{ points }}</td>
+        </tr>
+        <tr>
+          <td>Пример решен:</td>
+          <td>{{ response }}</td>
+        </tr>
+        </table>
+      <form action="" method="POST">
+        <button name="send" class="btn" type="submit" value="send">Вернуться в главное меню</button>
+      </form>
+    </main>
+    <footer>
+      <p>&copy; 2024 Решай и Радуйся!</p>
+    </footer>
+  </div>
+</body>
+</html>

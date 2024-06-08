@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Решай и радуйся</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index_style.css') }}">
+</head>
+<body>
+<body>
+  <div class="container">
+    <header>
+      <h1>Решай и радуйся</h1>
+    </header>
+    <main>
+      <div class="welcome-message">
+        <p>
+          {{ username }}, пожалуйста выберите уровень сложности
+        </p>
+      </div>
+      <form action="" method="POST">
+        <button name="login" class="btn" type="submit" value="easy">Легкий уровень</button>
+        <button name="register" class="btn" type="submit" value="normal">Средний уровень</button>
+        <button name="register" class="btn" type="submit" value="hard">Сложный уровень</button>
+      </form>
+    </main>
+    <footer>
+      <p>&copy; 2024 Решай и Радуйся!</p>
+    </footer>
+</body>
+</html>

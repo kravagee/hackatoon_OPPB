@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Решай и радуйся - Личный кабинет</title>
+      <link rel="stylesheet" href="{{ url_for('static', ='css/style_private_office.css') }}">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Решай и радуйся!</h1>
+          <form action="" method="POST">
+            <button class="btn" type="submit" name="back-btn" value="3">Вернуться на домашнюю страницу</button>
+      </form>
+    </header>
+    <main>
+      <table class='table'>
+        <tr>
+          <td>Количество решенных примеров/уравнений</td>
+          <td>{{ solved_examples }}</td>
+        </tr>
+        <tr>
+          <td>Количество поинтов</td>
+          <td>{{ points }}</td>
+        </tr>
+        <tr>
+          <td>Процент правильно решенных примеров</td>
+          <td>{{ percentage_examples }}</td>
+        </tr>
+        </table>
+    </main>
+    <footer>
+      <p>&copy; 2024 Решай и радуйся</p>
+    </footer>
+  </div>
+</body>
+</html>

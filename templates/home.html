@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Решай и Радуйся!</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index_style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Решай и радуйся</h1>
+    </header>
+    <main>
+      <div class="welcome-message">
+        <h2>Добро пожаловать!</h2>
+        <p>Здравствуйте {{ username }}, Выберите что хотите сделать?
+        </p>
+      </div>
+      <form action="" method="POST">
+        <button name="private_office" class="btn" type="submit" value="0">Личный кабинет</button>
+      </form>
+      <form action="" method="POST">
+        <button name="top_user" class="btn" type="submit" value="1">Топ пользователей</button>
+      </form>
+      <form action="" method="POST">
+        <button name="solving_examples" class="btn" type="submit" value="2">Решение примеров</button>
+      </form>
+      <form action="" method="POST">
+        <button name="leave" class="btn" type="submit" value="3">Выйти</button>
+      </form>
+
+    </main>
+    <footer>
+      <p>&copy; 2024 Решай и Радуйся!</p>
+    </footer>
+  </div>
+</body>
+</html>

@@ -5,10 +5,12 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 import sqlite3
 import secrets
 from config import password
+from math3 import MyMath
 
 
 server = Flask(__name__)
 bcrypt = Bcrypt(server)
+math = MyMath()
 server.config['SECRET_KEY'] = secrets.token_urlsafe(32)
 server.config['MAIL_SERVER'] = 'smtp.yandex.ru'
 server.config['MAIL_PORT'] = 465
@@ -145,27 +147,20 @@ def home(username):
 def examples(username):
     if request.method == 'POST':
         value = list(request.form.values())[0]
-        return redirect(url_for('example',  username=username, value=value))
+        return redirect(url_for('example',  username=username, nameex=value))
+    else:
+        return render_template('examples.html')
 
 
 @server.route('/example/<username>/<nameex>', methods=['POST', 'GET'])
 @login_required
 def example(username, nameex):
-    if request.method == 'POST':
-        if nameex == "square":
-            pass
-        elif nameex == "line":
-            pass
-        elif nameex == "plus":
-            pass
-        elif nameex == "minus":
-            pass
-        elif nameex == "sub":
-            pass
-        else:
-            pass
+    if nameex == "square":
+        return redirect(url_for('solving_example', nameex=nameex, username=username, difficult='square'))
+    elif nameex == "line":
+        return redirect(url_for('solving_example', username=username, nameex=nameex, difficult='line'))
     else:
-        return render_template('example.html')
+        return redirect(url_for('difficult', username=username, nameex=nameex))
 
 
 @server.route('/top/<username>', methods=['GET'])
@@ -175,6 +170,134 @@ def top(username):
     cur = con.cursor()
     query = cur.execute(f'''SELECT login, points FROM users ORDER BY points DESC LIMIT 10''').fetchall()
     return render_template('top_users.html', query=query)
+
+
+@server.route('/profile/<username>', methods=['GET', 'POST'])
+@login_required
+def profile(username):
+    if request.method == 'POST':
+        if list(request.form.values())[0] == '3':
+            return redirect(url_for('home', username=username))
+    else:
+        con = sqlite3.connect('project.db')
+        cur = con.cursor()
+        query = cur.execute(f'''SELECT solved_examples, incorrectly_solved_examples, points 
+        FROM stats WHERE login="{username}"''').fetchone()
+        percentage = int(query[0]) / int(query[1])
+        return render_template('private_office.html', solved_examples=query[0],
+                               points=query[2], percentage_examples=query[0], username=username)
+
+
+@server.route('/difficult/<username>/<nameex>', methods=['GET', 'POST'])
+@login_required
+def difficult(username, nameex):
+    if request.method == 'POST':
+        value = list(request.form.values())[0]
+        return redirect(url_for('solving_example', nameex=nameex, username=username, difficult=value))
+    else:
+        return render_template('difficult.html', username=username)
+
+
+@server.route('/<nameex>/<difficult>/<username>', methods=['GET', 'POST'])
+@login_required
+def solving_example(nameex, difficult, username):
+    equation = ''
+    if nameex == 'square':
+        equation = math.generate_square_x()
+    elif nameex == 'line':
+        equation = math.generate_line_x()
+    elif nameex == 'plus':
+        if difficult == 'easy':
+            equation = math.generate_sum_stage_1()
+        elif difficult == 'normal':
+            equation = math.generate_sum_stage_2()
+        else:
+            equation = math.generate_sum_stage_3()
+    elif nameex == 'minus':
+        if difficult == 'easy':
+            equation = math.generate_min_stage_1()
+        elif difficult == 'normal':
+            equation = math.generate_min_stage_2()
+        else:
+            equation = math.generate_min_stage_3()
+    elif nameex == 'sub':
+        if difficult == 'easy':
+            equation = math.generate_crop_stage_1()
+        elif difficult == 'normal':
+            equation = math.generate_crop_stage_2()
+        else:
+            equation = math.generate_crop_stage_3()
+    elif nameex == 'multiply':
+        if difficult == 'easy':
+            equation = math.generate_multiply_stage_1()
+        elif difficult == 'normal':
+            equation = math.generate_multiply_stage_2()
+        else:
+            equation = math.generate_multiply_stage_3()
+    if request.method == 'POST':
+        anwser = request.form['anwser']
+        if nameex == 'square':
+            response = math.check_answer_square_x(anwser)[0]
+            return redirect(url_for('example_stats', response=response, example_equation=equation))
+        elif nameex == 'line':
+            response = math.check_answer_line_x(anwser)[0]
+            return redirect(url_for('example_stats', response=response, example_equation=equation))
+        elif nameex == 'plus':
+            if difficult == 'easy':
+                response = math.check_answer_sum_stage_1(anwser)[0]
+                return redirect(url_for('example_stats', response=response, example_equation=equation))
+            elif difficult == 'normal':
+                response = math.check_answer_sum_stage_2(anwser)[0]
+                return redirect(url_for('example_stats', response=response, example_equation=equation))
+            else:
+                response = math.check_answer_sum_stage_3(anwser)[0]
+                return redirect(url_for('example_stats', response=response, example_equation=equation))
+        elif nameex == 'minus':
+            if difficult == 'easy':
+                response = math.check_answer_min_stage_1(anwser)[0]
+                return redirect(url_for('example_stats', response=response, example_equation=equation))
+            elif difficult == 'normal':
+                response = math.check_answer_min_stage_2(anwser)[0]
+                return redirect(url_for('example_stats', response=response, example_equation=equation))
+            else:
+                response = math.check_answer_min_stage_3(anwser)[0]
+                return redirect(url_for('example_stats', response=response, example_equation=equation))
+        elif nameex == 'sub':
+            if difficult == 'easy':
+                response = math.check_answer_crop_stage_1(anwser)[0]
+                return redirect(url_for('example_stats', response=response, example_equation=equation))
+            elif difficult == 'normal':
+                response = math.check_answer_crop_stage_2(anwser)[0]
+                return redirect(url_for('example_stats', response=response, example_equation=equation))
+            else:
+                response = math.check_answer_crop_stage_3(anwser)[0]
+                return redirect(url_for('example_stats', response=response, example_equation=equation))
+        elif nameex == 'multiply':
+            if difficult == 'easy':
+                response = math.check_answer_multiply_stage_1(anwser)[0]
+                return redirect(url_for('example_stats', response=response, example_equation=equation))
+            elif difficult == 'normal':
+                response = math.check_answer_multiply_stage_2(anwser)[0]
+                return redirect(url_for('example_stats', response=response, example_equation=equation))
+            else:
+                response = math.check_answer_multiply_stage_3(anwser)[0]
+                return redirect(url_for('example_stats', response=response, example_equation=equation))
+    else:
+        return render_template('solving_examples.html', example=equation)
+
+
+@server.route('/example_stats/<username>', methods=['GET', 'POST'])
+@login_required
+def example_stats(username, response, example_equation):
+    if request.method == 'POST':
+        return redirect(url_for('home', username=username))
+    else:
+        if response[0] == 'Верно':
+            point = math.edit_rating(username, response[2])
+        else:
+            point = 0
+        return render_template('example_stats.html', example_equation=example_equation, points=point, response=response)
+
 
 
 server.run()

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Решай и Радуйся!</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index_style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Решай и радуйся</h1>
+    </header>
+    <main>
+      <div class="welcome-message">s
+        <h2>Добро пожаловать на сайт Решай и Радуйся!</h2>
+        <p>
+          Здесь вы можете решать математические задачи различного уровня! От сложных до самых лёгких
+        </p>
+      </div>
+      <form action="" method="POST">
+       <button name="square" class="btn" type="submit" value="square">Квадратные уравнения</button>
+        <button name="plus" class="btn" type="submit" value="plus">Сложение</button>
+        <button name="minus" class="btn" type="submit" value="minus">Вычетание</button>
+        <button name="line" class="btn" type="submit" value="line">Линейные уравнения</button>
+        <button name="sub" class="btn" type="submit" value="sub">Деление</button>
+        <button name="multiply" class="btn" type="submit" value="multiply">Умножение</button>
+      </form>
+    </main>
+    <footer>
+      <p>&copy; 2024 Решай и Радуйся!</p>
+    </footer>
+  </div>
+</body>
+</html>

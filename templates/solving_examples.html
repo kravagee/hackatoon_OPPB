@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Решай и Радуйся!</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_solving_examples.css') }}">
+</head>
+<body>
+    <header>
+      <h1>Решай и радуйся</h1>
+      <form action="" method="POST">
+      <input type="hidden" name="dummy" value="dummy">
+      <button class="btn" type="submit" name="back-btn" value="3">Вернуться на домашнюю страницу</button>
+      </form>
+    </header>
+    <main>
+       <form action="" method="POST">
+        <div>{{ example_equation }}</div>
+      <input name="answer" type="text" placeholder="Введите ответ" required>
+      <button type="submit">Отправить ответ</button>
+      </form>
+    </main>
+    <footer>
+      <p>&copy; 2024 Решай и Радуйся!</p>
+    </footer>
+  </div>
+</body>
+</html>

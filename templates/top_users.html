@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Топ пользователей</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style_top_users.css') }}">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Решай и радуйся!</h1>
+            <form action="" method="POST">
+        <button class="btn" type="submit" name="back-btn" value="3">Вернуться на домашнюю страницу</button>
+      </form>
+    </header>
+
+    <main>
+      <h1>Топ пользователей</h1>
+      <ul class="task-list" id="allTasks">
+        {% for username, points in query %}
+        <table class='table'>
+        <tr>
+          <td>Имя пользователя</td>
+          <td>Количество очков</td>
+        </tr>
+        <tr>
+          <td>{{ username }}</td>
+          <td>{{ points }}</td>
+        </tr>
+        </table>
+        {% endfor %}
+      </ul>
+    </main>
+    <footer>
+      <p>&copy; 2024 Решай и радуйся</p>
+    </footer>
+  </div>
+</body>
+</html>

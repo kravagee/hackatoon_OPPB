@@ -1,0 +1,100 @@
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  background-image: url(https://png.pngtree.com/background/20211215/original/pngtree-educational-mathematical-formulas-on-white-background-picture-image_1457809.jpg);
+  background-size: cover;
+  background-size: contain;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+
+}
+
+.registration-container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 350px;
+}
+
+h2 {
+  color: #3498db;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input[type="text"],
+input[type="password"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+
+button[type="submit"] {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+a {
+  text-decoration: none;
+  margin-bottom: 10px;
+  display: block;
+  color: #3498db;
+}
+}
+a:hover {
+  text-decoration: underline;
+}
+
+[data-tooltip] {
+    position: relative; 
+   }
+   [data-tooltip]::after {
+    content: attr(data-tooltip); 
+    position: absolute;
+    width: 300px;
+    left: 0; top: 0; 
+    background: #3498db; 
+    color: #fff; 
+    padding: 0.5em; 
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
+    pointer-events: none; 
+    opacity: 0; 
+    transition: 1s; 
+   } 
+   [data-tooltip]:hover::after {
+    opacity: 1; 
+    top: 2em; 
+  }
+
+.help_reg {
+  display: inline-block;
+}
+
