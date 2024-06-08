@@ -195,7 +195,7 @@ def profile(username):
             con.close()
             return render_template('private_office.html', solved_examples='Вы ещё не решали примеры',
                                    points=0, percentage_examples=0, username=username)
-        percentage = int(query[0]) / int(query[1]) * 100
+        percentage = round(int(query[0]) / int(query[1]) * 100)
         con.commit()
         con.close()
         return render_template('private_office.html', solved_examples=query[1],

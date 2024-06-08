@@ -378,7 +378,7 @@ class MyMath:
         if float(self.answer_multiply_stage_1()) == float(user_answer):
             return ['Верно', True, 'mul_1']
         else:
-            return [f'Неверно. Правильный ответ {self.answer_multiply()}.', False]
+            return [f'Неверно. Правильный ответ {self.answer_multiply_stage_1()}.', False]
 
     def generate_multiply_stage_2(self):
         """
