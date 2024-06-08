@@ -221,8 +221,6 @@ def solving_example(nameex, difficult, username):
         if list(request.form.values())[0] == '3':
             return redirect(url_for('home', username=username))
         response = []
-        if isinstance(anwser, str):
-            return render_template('solving_examples.html', response='Только числа!')
         if nameex == 'square':
             response = math.check_answer_square_x(anwser)
         elif nameex == 'line':
