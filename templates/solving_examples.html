@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Решай и Радуйся!</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style_solving_examples.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style_solving_examples.css') }}">
 </head>
 <body>
     <header>
@@ -15,10 +15,11 @@
       </form>
     </header>
     <main>
+      <div>{{ example_equation }}</div>
        <form action="" method="POST">
-        <div>{{ example_equation }}</div>
-      <input name="answer" type="text" placeholder="Введите ответ" required>
-      <button type="submit">Отправить ответ</button>
+           <input name="example_equation" type="hidden" value="{{ example_equation }}">
+           <input name="solving_examples" type="text" placeholder="Введите ответ" required>
+           <button type="submit">Отправить ответ</button>
       </form>
     </main>
     <footer>

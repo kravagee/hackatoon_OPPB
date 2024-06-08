@@ -150,7 +150,7 @@ class MyMath:
         """
         Вернет решение последнего сгенерированного примера на сложение простого уровня сложности
         """
-        return self.a_s + self.b_s
+        return self.a_s_1 + self.b_s_1
 
     def check_answer_sum_stage_1(self, user_answer):
         """
@@ -430,10 +430,17 @@ class MyMath:
 
     def edit_rating(self, login, true_task):
         data = {'square_x': 15, 'line_x': 10, 's_1': 3, 's_2': 5, 's_3': 10,
-                 'm_1': 3, 'm_2': 5, 'm_3': 10,'cr_1': 3, 'cr_2': 5,
-                 'cr_3': 10, 'mul_1': 3, 'mul_2': 5, 'mul_3': 10}
+                'm_1': 3, 'm_2': 5, 'm_3': 10, 'cr_1': 3, 'cr_2': 5,
+                'cr_3': 10, 'mul_1': 3, 'mul_2': 5, 'mul_3': 10}
         point = data[true_task]
         con = sqlite3.connect('project.db')
         cursor = con.cursor()
-        cursor.execute(f'''UPDATE stats SET points = points + {point} WHERE login="{login}"''')
+        points = cursor.execute(f'''SELECT points FROM stats WHERE login="{login}"''').fetchone()
+        if not points:
+            points = point
+        else:
+            points += point
+        print(points)
+        cursor.execute(f'''UPDATE stats SET points={points}  WHERE login="{login}"''')
+        con.close()
         return point
