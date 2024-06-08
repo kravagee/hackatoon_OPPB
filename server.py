@@ -195,7 +195,7 @@ def profile(username):
             con.close()
             return render_template('private_office.html', solved_examples='Вы ещё не решали примеры',
                                    points=0, percentage_examples=0, username=username)
-        percentage = int(query[1]) / int(query[0]) * 100
+        percentage = int(query[0]) / int(query[1]) * 100
         con.commit()
         con.close()
         return render_template('private_office.html', solved_examples=query[1],
@@ -335,7 +335,7 @@ def example_stats(username, response, example_equation, point):
         cur = con.cursor()
         query = cur.execute(f'''SELECT * FROM stats WHERE login="{username}"''').fetchone()
         if not query:
-            cur.execute(f'''INSERT INTO stats VALUES ({solved_examples}, {0}, "{username}", {point})''')
+            cur.execute(f'''INSERT INTO stats VALUES ({solved_examples}, {1}, "{username}", {point})''')
             con.commit()
             con.close()
             return render_template('example_stats.html', example_equation=example_equation, points=point,
