@@ -439,7 +439,8 @@ class MyMath:
         if not points:
             points = point
         else:
-            points += point
+            print(points)
+            points = point + points[0]
         print(points)
         cursor.execute(f'''UPDATE stats SET points={points}  WHERE login="{login}"''')
         con.commit()

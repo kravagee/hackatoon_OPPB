@@ -195,11 +195,11 @@ def profile(username):
             con.close()
             return render_template('private_office.html', solved_examples='Вы ещё не решали примеры',
                                    points=0, percentage_examples=0, username=username)
-        percentage = int(query[0]) / int(query[1])
+        percentage = int(query[1]) / int(query[0]) * 100
         con.commit()
         con.close()
         return render_template('private_office.html', solved_examples=query[1],
-                               points=query[2], percentage_examples=percentage, username=username)
+                               points=query[2], percentage_examples=f'{percentage}%', username=username)
 
 
 @server.route('/difficult/<username>/<nameex>', methods=['GET', 'POST'])
@@ -216,11 +216,15 @@ def difficult(username, nameex):
 @login_required
 def solving_example(nameex, difficult, username):
     if request.method == 'POST':
-        anwser = request.form['solving_examples']
-        equation = request.form['example_equation']
-        if list(request.form.values())[0] == '3':
+        print(list(request.form.values())[0])
+        if list(request.form.values())[0] == 'dummy':
             return redirect(url_for('home', username=username))
         response = []
+        anwser = request.form['solving_examples']
+        anws = [i for i in anwser if i.isdigit()]
+        equation = request.form['example_equation']
+        if len(anws) != len(anwser):
+            return render_template('solving_examples.html', example_equation=equation, response='Некорректный ввод.')
         if nameex == 'square':
             response = math.check_answer_square_x(anwser)
         elif nameex == 'line':
@@ -308,35 +312,35 @@ def example_stats(username, response, example_equation, point):
     else:
         con = sqlite3.connect('project.db')
         cur = con.cursor()
-        examples = cur.execute(f'''SELECT examples FROM stats WHERE login="{login}"''').fetchone()
+        examples = cur.execute(f'''SELECT examples FROM stats WHERE login="{username}"''').fetchone()
         con.close()
         if not examples:
             examples = 1
         else:
-            examples += 1
+            examples = examples[0] + 1
         if response == 'Верно':
             con = sqlite3.connect('project.db')
             cur = con.cursor()
-            solved_examples = cur.execute(f'''SELECT solved_examples FROM stats WHERE login="{login}"''').fetchone()
+            solved_examples = cur.execute(f'''SELECT solved_examples FROM stats WHERE login="{username}"''').fetchone()
             if not solved_examples:
                 solved_examples = 1
             else:
-                solved_examples += 1
-            cur.execute(f'''UPDATE stats SET solved_examples={solved_examples} WHERE login="{login}"''')
+                solved_examples = solved_examples[0] + 1
+            cur.execute(f'''UPDATE stats SET solved_examples={solved_examples} WHERE login="{username}"''')
             con.close()
         else:
             solved_examples = 0
             point = 0
         con = sqlite3.connect('project.db')
         cur = con.cursor()
-        query = cur.execute(f'''SELECT * FROM stats WHERE login="{login}"''').fetchone()
+        query = cur.execute(f'''SELECT * FROM stats WHERE login="{username}"''').fetchone()
         if not query:
-            cur.execute(f'''INSERT INTO stats VALUES ({1}, {solved_examples}, "{login}", {point})''')
+            cur.execute(f'''INSERT INTO stats VALUES ({solved_examples}, {0}, "{username}", {point})''')
             con.commit()
             con.close()
             return render_template('example_stats.html', example_equation=example_equation, points=point,
                                    response=response)
-        cur.execute(f'''UPDATE stats SET examples={examples} WHERE login="{login}"''')
+        cur.execute(f'''UPDATE stats SET examples={examples} WHERE login="{username}"''')
         con.commit()
         con.close()
         return render_template('example_stats.html', example_equation=example_equation, points=point, response=response)
