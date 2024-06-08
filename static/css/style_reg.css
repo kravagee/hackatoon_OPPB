@@ -24,6 +24,7 @@ h2 {
   color: #3498db;
   margin-bottom: 20px;
 }
+
 input[type="email"],
 input[type="text"],
 input[type="password"] {
@@ -36,6 +37,7 @@ input[type="password"] {
   font-size: 16px;
   outline: none;
 }
+
 input[type="email"]:focus,
 input[type="text"]:focus,
 input[type="password"]:focus {
@@ -55,8 +57,9 @@ button[type="submit"] {
   font-size: 16px;
   transition: background-color 0.3s ease;
 }
+
 button[type="submit"]:hover {
-  background-color: #45a049;
+  background-color: #04b2b8;
 }
 a {
   text-decoration: none;
@@ -64,29 +67,33 @@ a {
   display: block;
   color: #3498db;
 }
+
 a:hover {
   text-decoration: underline;
 }
+
 [data-tooltip] {
     position: relative; 
    }
-   [data-tooltip]::after {
-    content: attr(data-tooltip); 
-    position: absolute;
-    width: 300px;
-    left: 0; top: 0; 
-    background: #3498db; 
-    color: #fff; 
-    padding: 0.5em; 
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
-    pointer-events: none; 
-    opacity: 0; 
-    transition: 1s; 
-   } 
-   [data-tooltip]:hover::after {
-    opacity: 1; 
-    top: 2em; 
-  }
+   
+[data-tooltip]::after {
+content: attr(data-tooltip); 
+position: absolute;
+width: 300px;
+left: 0; top: 0; 
+background: #3498db; 
+color: #fff; 
+padding: 0.5em; 
+box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
+pointer-events: none; 
+opacity: 0; 
+transition: 1s; 
+} 
+
+[data-tooltip]:hover::after {
+opacity: 1; 
+top: 2em; 
+}
 
 .help_log {
   display: inline-block;
