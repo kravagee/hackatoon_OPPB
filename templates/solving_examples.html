@@ -17,6 +17,7 @@
     <main>
       <div>{{ example_equation }}</div>
        <form action="" method="POST">
+           <p>{{ response }}</p>
            <input name="example_equation" type="hidden" value="{{ example_equation }}">
            <input name="solving_examples" type="text" placeholder="Введите ответ" required>
            <button type="submit">Отправить ответ</button>

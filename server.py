@@ -126,8 +126,8 @@ def verify_email(username, response=''):
     return render_template('verify_email.html', response=response)
 
 
-@login_required
 @server.route('/home/<username>', methods=['GET', 'POST'])
+@login_required
 def home(username):
     if request.method == 'POST':
         value = list(request.form.values())[0]
@@ -173,6 +173,8 @@ def top(username):
     con = sqlite3.connect('project.db')
     cur = con.cursor()
     query = cur.execute(f'''SELECT login, points FROM stats ORDER BY points DESC LIMIT 10''').fetchall()
+    con.commit()
+    con.close()
     return render_template('top_users.html', query=query)
 
 
@@ -189,11 +191,15 @@ def profile(username):
         FROM stats WHERE login="{username}"''').fetchone()
         print(query)
         if not query:
+            con.commit()
+            con.close()
             return render_template('private_office.html', solved_examples='Вы ещё не решали примеры',
                                    points=0, percentage_examples=0, username=username)
         percentage = int(query[0]) / int(query[1])
-        return render_template('private_office.html', solved_examples=query[0],
-                               points=query[2], percentage_examples=query[0], username=username)
+        con.commit()
+        con.close()
+        return render_template('private_office.html', solved_examples=query[1],
+                               points=query[2], percentage_examples=percentage, username=username)
 
 
 @server.route('/difficult/<username>/<nameex>', methods=['GET', 'POST'])
@@ -215,6 +221,8 @@ def solving_example(nameex, difficult, username):
         if list(request.form.values())[0] == '3':
             return redirect(url_for('home', username=username))
         response = []
+        if isinstance(anwser, str):
+            return render_template('solving_examples.html', response='Только числа!')
         if nameex == 'square':
             response = math.check_answer_square_x(anwser)
         elif nameex == 'line':
@@ -247,12 +255,20 @@ def solving_example(nameex, difficult, username):
                 response = math.check_answer_multiply_stage_2(anwser)
             else:
                 response = math.check_answer_multiply_stage_3(anwser)
+        if len(response) < 3:
+            return redirect(url_for('example_stats', username=username, response=response[0], example_equation=equation,
+                                    point=0))
         return redirect(url_for('example_stats', username=username, response=response[0], example_equation=equation,
                                 point=math.edit_rating(username, response[2])))
     else:
         equation = ''
+        response = ''
         if nameex == 'square':
             equation = math.generate_square_x()
+            response = '''В качестве ответа может быть принято
+        1) 2 корня кв уравнения через пробел(это могут быть целые числа или дробные(округлите до сотых) числа)
+        2) один корень - целое чило или дробное(округлите до сотых) число
+        3) строка 'Корней нет'''
         elif nameex == 'line':
             equation = math.generate_line_x()
         elif nameex == 'plus':
@@ -283,7 +299,7 @@ def solving_example(nameex, difficult, username):
                 equation = math.generate_multiply_stage_2()
             else:
                 equation = math.generate_multiply_stage_3()
-        return render_template('solving_examples.html', example_equation=equation)
+        return render_template('solving_examples.html', example_equation=equation, response=response)
 
 
 @server.route('/example_stats/<username>/<response>/<example_equation>/<point>', methods=['GET', 'POST'])

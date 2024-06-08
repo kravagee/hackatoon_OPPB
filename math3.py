@@ -207,7 +207,7 @@ class MyMath:
         if float(user_answer) == float(self.answer_sum_stage_3()):
             return ['Верно', True, 's_3']
         else:
-            return [f'Неверно. Правильный ответ {self.answer_sum_stage_3}.', False]
+            return [f'Неверно. Правильный ответ {self.answer_sum_stage_3()}.', False]
 
     def generate_min_stage_1(self):
         """
@@ -442,5 +442,6 @@ class MyMath:
             points += point
         print(points)
         cursor.execute(f'''UPDATE stats SET points={points}  WHERE login="{login}"''')
+        con.commit()
         con.close()
         return point
